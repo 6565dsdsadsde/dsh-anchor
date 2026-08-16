@@ -32,5 +32,6 @@
   },
   "devDependencies": {
     "@deepseek-ai/cordis": "4.0.1"
-  }
+  },
+  "author": "Wang-Lin-Chang"
 }

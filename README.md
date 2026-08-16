@@ -5,7 +5,7 @@
 > **长程任务执行无限制。** 每个高熵工具动作预承诺意图 + 当场对账；磁盘上的锚点树就是会话真相源。进程崩了，扫树、收养、继续——进度零丢失。
 
 [![license](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](./LICENSE)
-[![ci](https://github.com/6565dsdsadsde/dsh-anchor/actions/workflows/ci.yml/badge.svg)](https://github.com/6565dsdsadsde/dsh-anchor/actions/workflows/ci.yml)
+[![ci](https://github.com/Wang-Lin-Chang/dsh-anchor/actions/workflows/ci.yml/badge.svg)](https://github.com/Wang-Lin-Chang/dsh-anchor/actions/workflows/ci.yml)
 [![topic: dsh-plugin](https://img.shields.io/badge/topic-dsh--plugin-4d6bfe)](https://github.com/topics/dsh-plugin)
 [![topic: dsh](https://img.shields.io/badge/topic-dsh-4d6bfe)](https://github.com/topics/dsh)
 
@@ -57,7 +57,7 @@ session-anchors/
 
 ```sh
 # 安装（git 源，固定 tag）
-dsh plugin --profile <name> add "github:6565dsdsadsde/dsh-anchor#v0.2.0"
+dsh plugin --profile <name> add "github:Wang-Lin-Chang/dsh-anchor#v0.2.0"
 ```
 
 然后在 profile 的 `cordis.patch.yml` 挂载：
