@@ -1,5 +1,7 @@
 # dsh-anchor
 
+> **Part of the [DSH plugin suite](https://github.com/Wang-Lin-Chang)** — six Apache-2.0 plugins for DeepSeek Harness. · DSH 插件套件之一：六个 Apache-2.0 插件。
+
 > **Long-running sessions without limits.** Every high-entropy tool action gets a pre-committed intent and immediate reconciliation; the anchor tree on disk is the session's source of truth. Crash the process, rescan the tree, adopt, continue — nothing is lost.
 >
 > **长程任务执行无限制。** 每个高熵工具动作预承诺意图 + 当场对账；磁盘上的锚点树就是会话真相源。进程崩了，扫树、收养、继续——进度零丢失。
