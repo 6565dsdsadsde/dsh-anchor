@@ -1,0 +1,33 @@
+{
+  "name": "dsh-anchor",
+  "version": "0.1.0",
+  "description": "Session Anchor Protocol plugin for DeepSeek Harness: pre-committed intents + immediate reconciliation on every tool action. Crash, rescan the anchor tree, adopt, continue - the filesystem is the session's truth. Tested on Windows 11.",
+  "type": "module",
+  "main": "src/plugin.ts",
+  "files": [
+    "src/",
+    "test/",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node --experimental-strip-types test/sampling.test.ts && node --experimental-strip-types test/plugin-anchor.test.ts && node --experimental-strip-types test/plugin-adopt.test.ts && node --experimental-strip-types test/plugin-blind.test.ts"
+  },
+  "keywords": [
+    "dsh-plugin",
+    "dsh",
+    "deepseek-harness",
+    "anchor",
+    "long-running",
+    "adoption",
+    "reliability",
+    "session-truth"
+  ],
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=22.5"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "^4.0.0"
+  }
+}
