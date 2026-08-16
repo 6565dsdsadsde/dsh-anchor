@@ -1,5 +1,6 @@
 // dsh-anchor/test/p4-polluter.mjs —— P4 双盲注入进程：独立进程改坏环境（插件完全不知情）
-// 轮询 .pollute-<i> 信号 → sleep 0-45ms（必在 50ms 窗口内）→ 50% 概率改坏目标文件 → 留 .polluted-<i> 事实记录
+// 轮询 .pollute-<i> 信号 → sleep 0-45ms（时序扰动，不再承担正确性）→ 50% 概率改坏目标文件
+// → 每步必写完成确认：.polluted-<i>（注入事实）或 .skipped-<i>（跳过）——driver 据此握手
 import * as fs from 'node:fs'
 import * as path from 'node:path'
 
@@ -10,12 +11,14 @@ for (let i = 1; i <= 20; i++) {
   const sig = path.join(envDir, `.pollute-${i}`)
   for (let t = 0; t < 400 && !fs.existsSync(sig); t++) await sleep(5)   // 等信号（2s 上限）
   if (!fs.existsSync(sig)) break
-  await sleep(Math.floor(Math.random() * 46))     // 0-45ms：必在 50ms 窗口内
+  await sleep(Math.floor(Math.random() * 46))     // 0-45ms 时序扰动
   if (Math.random() < 0.5) {
     const f = path.join(envDir, `f${i % 3}.txt`)
     try { fs.writeFileSync(f, 'POLLUTED-BY-EXTERNAL') } catch {}
     pollutedCount++
     fs.writeFileSync(path.join(envDir, `.polluted-${i}`), 'yes')   // 注入事实记录（真相）
+  } else {
+    fs.writeFileSync(path.join(envDir, `.skipped-${i}`), 'yes')    // 跳过确认（driver 握手）
   }
 }
 console.log(JSON.stringify({ pollutedCount }))
