@@ -115,6 +115,7 @@ service.adoptState    // 冷启收养判定（clean/dirty/contaminated/fresh）
 ## 诚实边界 / Honest boundaries
 
 - **平台实测面**：Windows 真机 37/37（Windows 11 · Node 25.8）；Linux 37/37（[dsh-cross-platform](https://github.com/Wang-Lin-Chang/dsh-cross-platform) 实验环境，零代码改动）；macOS 未实测——锚点树协议本身跨平台（Node 文件系统 + 时间），但 macOS 上的完整验收在路线图上，未实测前不声称。
+- **离线适用面**：架构上无网络依赖（锚点树真相源 + 本地 SQLite）；数天级断网长跑未实测，不声称。
 - **对账覆盖 v0**：环境对账目前覆盖 `write`/`edit`/`create_file`（读磁盘验证）；其余工具走兜底对账（只判有无异常自报）。对账器按工具类型扩展是既定路线。
 - **收养 v0 弱校验**：冷启收养扫树做结构判定（干净/脏/污染），环境级 diff 校验的完整形态在 dsh-witness 的任务收养里已实现，会话级完整环境校验在路线图上。
 - 锚点是**观察者不是闸门**：对账失败只判 DIVERGED 并触发加密采样，不拦截工具执行（拦截权归官方 guard 机制）。
