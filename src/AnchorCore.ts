@@ -1,11 +1,11 @@
-// anchor-core/src/AnchorCore.ts —— 会话锚点协议 v0 生产实装（四轮实验判决固化）
+// anchor-core/src/AnchorCore.ts —— 会话锚点协议 v0 生产实装（四轮判决固化）
 // 原语四件套：open（intent+pre 预承诺）/ close（post 对账判词）/ recover（扫树三证据）/ adopt（收养续跑）
-// 四轮实验经验固化清单：
-//   ① 恒等对账（四号实验装置 bug）：intended/observed 必须同一命名空间——open 写 expect，close 只做比较
-//   ② 相位窗口（三号实验装置 bug）：所有写入 tmp+rename 原子，不留半写文件（半写=脏收养源）
-//   ③ 空锚点目录容错（三号实验装置 adopter bug）：recover 对空目录/缺文件全部降级容错
+// 四轮经验固化清单：
+//   ① 恒等对账（对账装置 bug）：intended/observed 必须同一命名空间——open 写 expect，close 只做比较
+//   ② 相位窗口（收养装置 bug）：所有写入 tmp+rename 原子，不留半写文件（半写=脏收养源）
+//   ③ 空锚点目录容错（收养器 bug）：recover 对空目录/缺文件全部降级容错
 //   ④ 并发 rename 竞争（Witness 经验）：跨进程竞争败者静默
-//   ⑤ Windows 路径清洗（四号实验装置 bug）：动作名非法字符替换
+//   ⑤ Windows 路径清洗（对账装置 bug）：动作名非法字符替换
 //   ⑥ 幂等（收养重跑）：close 重复调用安全；adopt 续跑幂等
 import * as fs from 'node:fs'
 import * as path from 'node:path'
@@ -55,6 +55,12 @@ export class AnchorCore {
     atomicWrite(path.join(dir, 'post.json'), JSON.stringify({ at: Date.now(), ...post }))
     atomicWrite(path.join(dir, 'verdict'), verdict)
     return verdict
+  }
+
+  /** 强制判词覆盖（复核发现环境不一致时——把"上个动作目标被篡改"归入当前判词） */
+  forceVerdict(dir: string, verdict: Verdict, note?: string): void {
+    atomicWrite(path.join(dir, 'verdict'), verdict)
+    if (note !== undefined) atomicWrite(path.join(dir, 'note'), note)
   }
 
   /** 便捷：指纹工具（同一命名空间——恒等对账纪律） */
