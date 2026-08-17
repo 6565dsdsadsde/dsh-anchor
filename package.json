@@ -1,6 +1,6 @@
 {
   "name": "dsh-anchor",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Session Anchor Protocol plugin for DeepSeek Harness: pre-committed intents + immediate reconciliation on every tool action. Crash, rescan the anchor tree, adopt, continue - the filesystem is the session's truth. Tested on Windows 11.",
   "type": "module",
   "main": "src/plugin.ts",
