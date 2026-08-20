@@ -1,7 +1,5 @@
 # dsh-anchor
 
-> **Part of the [DSH plugin suite](https://github.com/Wang-Lin-Chang)** — six Apache-2.0 plugins for DeepSeek Harness. · DSH 插件套件之一：六个 Apache-2.0 插件。
-
 > **Long-running sessions without limits.** Every high-entropy tool action gets a pre-committed intent and immediate reconciliation; the anchor tree on disk is the session's source of truth. Crash the process, rescan the tree, adopt, continue — nothing is lost.
 >
 > **长程任务执行无限制。** 每个高熵工具动作预承诺意图 + 当场对账；磁盘上的锚点树就是会话真相源。进程崩了，扫树、收养、继续——进度零丢失。
@@ -25,6 +23,16 @@ dsh-anchor 换一条路：**不记过去，锁定未来。**
 - 翻车在**当下**现形，不是事后追查
 - 锚点树 = 会话进度真相：**会话死了，树还在**；新会话扫树收养续跑（对齐官方 subagent 的 cold resume 语义，且比它多了环境对账）
 - 对应官方公开痛点：force-kill 丢 write-behind 尾部（[#483](https://github.com/deepseek-ai/deepseek-harness/discussions/483)）→ 我们零缓冲即时落盘；一条坏日志杀死会话（[#1593](https://github.com/deepseek-ai/deepseek-harness/discussions/1593)）→ 我们的真相源是目录结构，坏了一个锚点只损失那一步
+
+## 谁适合用它 / Who is this for
+
+- **长程会话**（几十上百步）的操盘手——被"动作打到错误假设"坑过的人：编码被改坏、杀错进程、状态泄漏；
+- 会话中途崩溃后想**找回进度真相**的人——锚点树在会话日志之外，冷启动扫树收养（clean / dirty / contaminated / fresh）；
+- 需要**审计轨迹**的人——每个高熵动作的 intent/pre/post 当场落盘，"当时预期 vs 实际"可查可复现。
+
+**不适合**：三五步就结束的短会话——采样纪律（最小间隔 7）的锚点成本用不上。
+
+> For long multi-step sessions where a wrong assumption hits the environment — and for anyone who wants the session's progress truth to survive the session itself. Not for short conversations.
 
 ## 工作原理 / How it works
 
@@ -114,8 +122,7 @@ service.adoptState    // 冷启收养判定（clean/dirty/contaminated/fresh）
 
 ## 诚实边界 / Honest boundaries
 
-- **平台实测面**：Windows 真机 37/37（Windows 11 · Node 25.8）；Linux 37/37（[dsh-cross-platform](https://github.com/Wang-Lin-Chang/dsh-cross-platform) 实验环境，零代码改动）；macOS 未实测——锚点树协议本身跨平台（Node 文件系统 + 时间），但 macOS 上的完整验收在路线图上，未实测前不声称。
-- **离线适用面**：架构上无网络依赖（锚点树真相源 + 本地 SQLite）；数天级断网长跑未实测，不声称。
+- **Windows-first。** 实测于 Windows 11 + Node 25.8。锚点树协议本身跨平台，但当前只在 Windows 真机验证过；未实测的平台不声称支持。
 - **对账覆盖 v0**：环境对账目前覆盖 `write`/`edit`/`create_file`（读磁盘验证）；其余工具走兜底对账（只判有无异常自报）。对账器按工具类型扩展是既定路线。
 - **收养 v0 弱校验**：冷启收养扫树做结构判定（干净/脏/污染），环境级 diff 校验的完整形态在 dsh-witness 的任务收养里已实现，会话级完整环境校验在路线图上。
 - 锚点是**观察者不是闸门**：对账失败只判 DIVERGED 并触发加密采样，不拦截工具执行（拦截权归官方 guard 机制）。
